@@ -1,11 +1,12 @@
-"""Pydantic models for the DataKap API."""
+# file: datakap/schemas.py
+"""Pydantic models for the DataKap API (updated for Pydantic v2)."""
 from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, Field, constr
+from pydantic import BaseModel, Field, ConfigDict, constr
 
 
 class Role(str, Enum):
@@ -28,21 +29,19 @@ class ErrorResponse(BaseModel):
 
 
 class AuthenticatedUser(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str
     email: str
     role: Role
     full_name: Optional[str] = Field(None, alias="fullName")
     phone: Optional[str]
 
-    class Config:
-        allow_population_by_field_name = True
-
 
 class ProfileResponse(AuthenticatedUser):
-    api_version: str = Field(alias="apiVersion")
+    model_config = ConfigDict(populate_by_name=True)
 
-    class Config:
-        allow_population_by_field_name = True
+    api_version: str = Field(alias="apiVersion")
 
 
 class LoginRequest(BaseModel):
@@ -51,13 +50,12 @@ class LoginRequest(BaseModel):
 
 
 class LoginResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     token: str
     refresh_token: str = Field(alias="refreshToken")
     expires_in: int = Field(alias="expiresIn")
     user: AuthenticatedUser
-
-    class Config:
-        allow_population_by_field_name = True
 
 
 class CompleteInviteRequest(BaseModel):
@@ -72,13 +70,17 @@ class RefreshRequest(BaseModel):
 
 
 class RefreshResponse(BaseModel):
+    """Response for a successful token refresh."""
+
     token: str
-    expires_in: int = Field(alias="expiresIn")
+    expiresIn: int
 
 
 class RegistrationFields(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     clave_elector: Optional[str] = Field(None, alias="claveElector")
-    sexo: Optional[constr(regex="^[MF]$")]
+    sexo: Optional[constr(pattern="^[MF]$")]
     nombre: Optional[str]
     apellido_paterno: Optional[str] = Field(None, alias="apellidoPaterno")
     apellido_materno: Optional[str] = Field(None, alias="apellidoMaterno")
@@ -90,9 +92,6 @@ class RegistrationFields(BaseModel):
     localidad: Optional[str]
     telefono: Optional[str]
     whatsapp: Optional[str]
-
-    class Config:
-        allow_population_by_field_name = True
 
 
 class RegistrationRequest(BaseModel):
@@ -107,6 +106,8 @@ class RegistrationResponse(BaseModel):
 
 
 class RegistrationSummaryItem(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str
     role: Role
     requires_photo: bool = Field(alias="requiresPhoto")
@@ -115,9 +116,6 @@ class RegistrationSummaryItem(BaseModel):
     created_at: datetime = Field(alias="createdAt")
     synced_at: Optional[datetime] = Field(None, alias="syncedAt")
     sync_status: SyncStatus = Field(alias="syncStatus")
-
-    class Config:
-        allow_population_by_field_name = True
 
 
 class Pagination(BaseModel):
@@ -136,22 +134,20 @@ class RegistrationDetailResponse(RegistrationSummaryItem):
 
 
 class RegistrationUpdateRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     fields: Optional[RegistrationFields] = None
     sync_status: Optional[SyncStatus] = Field(None, alias="syncStatus")
 
-    class Config:
-        allow_population_by_field_name = True
-
 
 class RegistrationSyncItem(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     client_request_id: str = Field(alias="clientRequestId")
     role: Role
     requires_photo: bool = Field(alias="requiresPhoto")
     fields: RegistrationFields
     created_at: datetime = Field(alias="createdAt")
-
-    class Config:
-        allow_population_by_field_name = True
 
 
 class RegistrationSyncRequest(BaseModel):
@@ -159,12 +155,11 @@ class RegistrationSyncRequest(BaseModel):
 
 
 class RegistrationSyncResult(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     client_request_id: str = Field(alias="clientRequestId")
     status: SyncStatus
     server_id: Optional[str] = Field(None, alias="serverId")
-
-    class Config:
-        allow_population_by_field_name = True
 
 
 class RegistrationSyncResponse(BaseModel):
@@ -172,15 +167,16 @@ class RegistrationSyncResponse(BaseModel):
 
 
 class RegistrationSyncSummary(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     pending: int
     synced_today: int = Field(alias="syncedToday")
     failed: int
 
-    class Config:
-        allow_population_by_field_name = True
-
 
 class AdminUser(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str
     email: str
     full_name: Optional[str] = Field(None, alias="fullName")
@@ -191,9 +187,6 @@ class AdminUser(BaseModel):
     verification_code: Optional[str] = Field(None, alias="verificationCode")
     created_at: datetime = Field(alias="createdAt")
 
-    class Config:
-        allow_population_by_field_name = True
-
 
 class AdminUserListResponse(BaseModel):
     items: List[AdminUser]
@@ -201,6 +194,8 @@ class AdminUserListResponse(BaseModel):
 
 
 class AdminUserCreateRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     email: str
     full_name: str = Field(alias="fullName")
     phone: str
@@ -209,36 +204,30 @@ class AdminUserCreateRequest(BaseModel):
     send_email: bool = Field(alias="sendEmail")
     expires_in_hours: int = Field(alias="expiresInHours")
 
-    class Config:
-        allow_population_by_field_name = True
-
 
 class AdminUserCreateResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str
     temporary_password: str = Field(alias="temporaryPassword")
     verification_code: str = Field(alias="verificationCode")
     expires_at: datetime = Field(alias="expiresAt")
 
-    class Config:
-        allow_population_by_field_name = True
-
 
 class AdminUserUpdateRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     goal: Optional[int] = None
     status: Optional[str] = None
 
-    class Config:
-        allow_population_by_field_name = True
-
 
 class AdminDashboardSummary(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     promoters: Dict[str, int]
     leaders: Dict[str, int]
     registrations: Dict[str, int]
     api_version: str = Field(alias="apiVersion")
-
-    class Config:
-        allow_population_by_field_name = True
 
 
 class CatalogLocationsResponse(BaseModel):

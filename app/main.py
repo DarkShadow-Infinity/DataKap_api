@@ -83,7 +83,7 @@ def refresh_token(
     token = db.refresh_token(payload.refresh_token)
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="INVALID_REFRESH_TOKEN")
-    return RefreshResponse(token=token, expires_in=TOKEN_TTL_SECONDS)
+    return RefreshResponse(token=token, expiresIn=TOKEN_TTL_SECONDS)
 
 
 @app.post("/auth/logout", status_code=status.HTTP_204_NO_CONTENT)

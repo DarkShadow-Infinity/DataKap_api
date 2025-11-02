@@ -1,0 +1,1495 @@
+{
+  "info": {
+    "name": "DataKap API",
+    "_postman_id": "datakap-collection-1",
+    "description": "Auto-generated simple Postman collection from OpenAPI: 1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "clientRequestId",
+      "value": "req-123"
+    }
+  ],
+  "item": [
+    {
+      "name": "POST /auth/login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Guardar token limpio en variables\", function () {",
+              "    var jsonData = {};",
+              "    try {",
+              "        jsonData = pm.response.json();",
+              "    } catch (e) {",
+              "        console.log(\"No JSON response\", e);",
+              "    }",
+              "",
+              "    var token = jsonData.token || jsonData.access_token || (jsonData.data && jsonData.data.token) || \"\";",
+              "    token = (\"\" + token).replace(/^\\\"+|\\\"+$/g, \"\").trim();",
+              "    console.log(\">> token extraído:\", token);",
+              "    pm.expect(token, \"token should exist\").to.not.be.empty;",
+              "",
+              "    try { pm.collectionVariables.unset(\"token\"); } catch(e) {}",
+              "    try { pm.environment.unset(\"token\"); } catch(e) {}",
+              "    try { pm.globals.unset(\"token\"); } catch(e) {}",
+              "",
+              "    pm.collectionVariables.set(\"token\", token);",
+              "    pm.environment.set(\"token\", token);",
+
+              "    var refreshToken = jsonData.refreshToken || (jsonData.data && jsonData.data.refreshToken) || \"\";",
+              "    pm.collectionVariables.set(\"refreshToken\", refreshToken);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n \t\"email\": \"admin@datakap.mx\",\n \t\"password\": \"Admin#2025\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Successful Login",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \t\"email\": \"admin@datakap.mx\",\n \t\"password\": \"Admin#2025\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \t\"token\": \"some-jwt-token\",\n  \t\"refreshToken\": \"some-refresh-token\",\n  \t\"expiresIn\": 3600,\n  \t\"user\": {\n  \t\t\"id\": \"usr-admin\",\n  \t\t\"email\": \"admin@datakap.mx\",\n  \t\t\"role\": \"admin\",\n  \t\t\"fullName\": \"Admin User\",\n  \t\t\"phone\": \"+52 55 0000 0000\"\n  \t}\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST /auth/complete-invite",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n \t\"email\": \"user@example.com\",\n \t\"temporaryPassword\": \"temp-password\",\n \t\"verificationCode\": \"123456\",\n \t\"newPassword\": \"a-new-super-secret-password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/complete-invite",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "complete-invite"
+          ]
+        },
+        "description": "Complete Invite"
+      },
+      "response": [
+        {
+          "name": "Successful Invite Completion",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \t\"email\": \"user@example.com\",\n \t\"temporaryPassword\": \"temp-password\",\n \t\"verificationCode\": \"123456\",\n \t\"newPassword\": \"a-new-super-secret-password\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/complete-invite",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "complete-invite"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"token\": \"some-jwt-token\",\n \t\"refreshToken\": \"some-refresh-token\",\n \t\"expiresIn\": 3600,\n \t\"user\": {\n \t\t\"id\": \"usr-example\",\n \t\t\"email\": \"user@example.com\",\n \t\t\"role\": \"promoter\",\n \t\t\"fullName\": \"Example User\",\n \t\t\"phone\": \"+52 55 1234 5678\"\n \t}\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST /auth/refresh",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n \t\"refreshToken\": \"{{refreshToken}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/refresh",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "refresh"
+          ]
+        },
+        "description": "Refresh Token"
+      },
+      "response": [
+        {
+          "name": "Successful Token Refresh",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \t\"refreshToken\": \"a-valid-refresh-token\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"token\": \"a-new-jwt-token\",\n \t\"expiresIn\": 3600\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST /auth/logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/auth/logout",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "logout"
+          ]
+        },
+        "description": "Logout"
+      },
+      "response": [
+        {
+          "name": "Successful Logout",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "GET /profile",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/profile",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "profile"
+          ]
+        },
+        "description": "Get Profile"
+      },
+      "response": [
+        {
+          "name": "Successful Profile Retrieval",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"id\": \"usr-admin\",\n \t\"email\": \"admin@datakap.mx\",\n \t\"role\": \"admin\",\n \t\"fullName\": \"Admin User\",\n \t\"phone\": \"+52 55 0000 0000\",\n \t\"apiVersion\": \"1.0.0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST /registrations",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n \t\"role\": \"promoter\",\n \t\"requiresPhoto\": true,\n \t\"fields\": {\n \t\t\"claveElector\": \"ABCD1234567890\",\n \t\t\"sexo\": \"M\",\n \t\t\"nombre\": \"Juan\",\n \t\t\"apellidoPaterno\": \"Perez\",\n \t\t\"apellidoMaterno\": \"Gonzalez\",\n \t\t\"direccion\": \"Calle Falsa 123\",\n \t\t\"codigoPostal\": \"12345\",\n \t\t\"vigencia\": \"2030\",\n \t\t\"estado\": \"Ciudad de México\",\n \t\t\"municipio\": \"Coyoacán\",\n \t\t\"localidad\": \"Del Carmen\",\n \t\t\"telefono\": \"5512345678\",\n \t\t\"whatsapp\": \"5512345678\"\n \t}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "registrations"
+          ]
+        },
+        "description": "Create Registration"
+      },
+      "response": [
+        {
+          "name": "Successful Registration Creation",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \t\"role\": \"promoter\",\n \t\"requiresPhoto\": true,\n \t\"fields\": {\n \t\t\"claveElector\": \"ABCD1234567890\",\n \t\t\"sexo\": \"M\",\n \t\t\"nombre\": \"Juan\",\n \t\t\"apellidoPaterno\": \"Perez\",\n \t\t\"apellidoMaterno\": \"Gonzalez\",\n \t\t\"direccion\": \"Calle Falsa 123\",\n \t\t\"codigoPostal\": \"12345\",\n \t\t\"vigencia\": \"2030\",\n \t\t\"estado\": \"Ciudad de México\",\n \t\t\"municipio\": \"Coyoacán\",\n \t\t\"localidad\": \"Del Carmen\",\n \t\t\"telefono\": \"5512345678\",\n \t\t\"whatsapp\": \"5512345678\"\n \t}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"id\": \"srv-0002\",\n \t\"status\": \"pending_validation\"\n}"
+        }
+      ],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "pm.collectionVariables.set(\"new_registration_id\", jsonData.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /registrations",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/registrations",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "registrations"
+          ]
+        },
+        "description": "List Registrations"
+      },
+      "response": [
+        {
+          "name": "Successful Registration List",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"items\": [\n \t\t{\n \t\t\t\"id\": \"srv-0001\",\n \t\t\t\"role\": \"promoter\",\n \t\t\t\"requiresPhoto\": true,\n \t\t\t\"fields\": {\n \t\t\t\t\"nombre\": \"Juan\",\n \t\t\t\t\"telefono\": \"5512345678\"\n \t\t\t},\n \t\t\t\"photoUrl\": \"https://cdn.datakap.mx/srv-0001.jpg\",\n \t\t\t\"createdAt\": \"2025-11-01T12:00:00Z\",\n \t\t\t\"syncedAt\": \"2025-11-01T12:05:00Z\",\n \t\t\t\"syncStatus\": \"synced\"\n \t\t}\n \t],\n \t\"pagination\": {\n \t\t\"page\": 1,\n \t\t\"limit\": 20,\n \t\t\"total\": 1\n \t}\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET /registrations/{registration_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/registrations/{{new_registration_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "registrations",
+            "{{new_registration_id}}"
+          ]
+        },
+        "description": "Get Registration"
+      },
+      "response": [
+        {
+          "name": "Successful Registration Retrieval",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/registrations/{registration_id}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations",
+                "{registration_id}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"id\": \"srv-0001\",\n \t\"role\": \"promoter\",\n \t\"requiresPhoto\": true,\n \t\"fields\": {\n \t\t\"nombre\": \"Juan\",\n \t\t\"telefono\": \"5512345678\"\n \t},\n \t\"photoUrl\": \"https://cdn.datakap.mx/srv-0001.jpg\",\n \t\"createdAt\": \"2025-11-01T12:00:00Z\",\n \t\"syncedAt\": \"2025-11-01T12:05:00Z\",\n \t\"syncStatus\": \"synced\",\n \t\"clientRequestId\": \"seed-1\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "PATCH /registrations/{registration_id}",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations/{{new_registration_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "registrations",
+            "{{new_registration_id}}"
+          ]
+        },
+        "description": "Update Registration"
+      },
+      "response": [
+        {
+          "name": "Successful Registration Update",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"fields\":{\"whatsapp\":\"5512345678\"}}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations/{registration_id}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations",
+                "{registration_id}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"id\": \"srv-0001\",\n \t\"role\": \"promoter\",\n \t\"requiresPhoto\": true,\n \t\"fields\": {\n \t\t\"nombre\": \"Juan\",\n \t\t\"telefono\": \"5512345678\",\n \t\t\"whatsapp\": \"5512345678\"\n \t},\n \t\"photoUrl\": \"https://cdn.datakap.mx/srv-0001.jpg\",\n \t\"createdAt\": \"2025-11-01T12:00:00Z\",\n \t\"syncedAt\": \"2025-11-02T14:30:00Z\",\n \t\"syncStatus\": \"synced\",\n \t\"clientRequestId\": \"seed-1\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "DELETE /registrations/{registration_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/registrations/{{new_registration_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "registrations",
+            "{{new_registration_id}}"
+          ]
+        },
+        "description": "Delete Registration"
+      },
+      "response": [
+        {
+          "name": "Successful Registration Deletion",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/registrations/{registration_id}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations",
+                "{registration_id}"
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "POST /registrations/sync",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"payload\":[]}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/registrations/sync",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "registrations",
+            "sync"
+          ]
+        },
+        "description": "Sync Registrations"
+      },
+      "response": [
+        {
+          "name": "Successful Sync",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"payload\":[]}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations/sync",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations",
+                "sync"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"results\": [\n \t\t{\n \t\t\t\"clientRequestId\": \"client-req-1\",\n \t\t\t\"status\": \"synced\",\n \t\t\t\"serverId\": \"srv-0003\"\n \t\t},\n \t\t{\n \t\t\t\"clientRequestId\": \"client-req-2\",\n \t\t\t\"status\": \"failed\",\n \t\t\t\"serverId\": null\n \t\t}\n \t]\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET /registrations/sync/summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/registrations/sync/summary",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "registrations",
+            "sync",
+            "summary"
+          ]
+        },
+        "description": "Sync Summary"
+      },
+      "response": [
+        {
+          "name": "Successful Sync Summary",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/registrations/sync/summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations",
+                "sync",
+                "summary"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"pending\": 10,\n \t\"syncedToday\": 5,\n \t\"failed\": 2\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET /admin/users",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/admin/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "users"
+          ]
+        },
+        "description": "List Admin Users"
+      },
+      "response": [
+        {
+          "name": "Successful Admin User List",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"items\": [\n \t\t{\n \t\t\t\"id\": \"usr-admin\",\n \t\t\t\"email\": \"admin@datakap.mx\",\n \t\t\t\"fullName\": \"Admin User\",\n \t\t\t\"phone\": \"+52 55 0000 0000\",\n \t\t\t\"role\": \"admin\",\n \t\t\t\"goal\": 500,\n \t\t\t\"status\": \"active\",\n \t\t\t\"verificationCode\": \"ADM1234\",\n \t\t\t\"createdAt\": \"2025-11-02T10:00:00Z\"\n \t\t}\n \t],\n \t\"pagination\": {\n \t\t\"page\": 1,\n \t\t\"limit\": 20,\n \t\t\"total\": 1\n \t}\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST /admin/users",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n \t\"email\":\"new.user@datakap.mx\",\n \t\"fullName\":\"New User\",\n \t\"phone\":\"+52 55 9999 9999\",\n \t\"role\":\"promoter\",\n \t\"sendEmail\":true,\n \t\"expiresInHours\":24\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/admin/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "users"
+          ]
+        },
+        "description": "Create Admin User"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "pm.collectionVariables.set(\"new_user_id\", jsonData.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /admin/users/{user_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/admin/users/{{new_user_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "users",
+            "{{new_user_id}}"
+          ]
+        },
+        "description": "Get Admin User Detail"
+      },
+      "response": [
+        {
+          "name": "Successful Admin User Retrieval",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{user_id}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{user_id}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"id\": \"usr-leader\",\n \t\"email\": \"leader@datakap.mx\",\n \t\"fullName\": \"Leader User\",\n \t\"phone\": \"+52 55 1111 1111\",\n \t\"role\": \"leader\",\n \t\"goal\": 200,\n \t\"status\": \"active\",\n \t\"verificationCode\": \"LED1234\",\n \t\"createdAt\": \"2025-11-02T10:00:00Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "PATCH /admin/users/{user_id}",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n \t\"goal\": 250\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/admin/users/{{new_user_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "users",
+            "{{new_user_id}}"
+          ]
+        },
+        "description": "Update Admin User Endpoint"
+      },
+      "response": [
+        {
+          "name": "Successful Admin User Update",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"goal\":250}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{user_id}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{user_id}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n \t\"id\": \"usr-leader\",\n \t\"email\": \"leader@datakap.mx\",\n \t\"fullName\": \"Leader User\",\n \t\"phone\": \"+52 55 1111 1111\",\n \t\"role\": \"leader\",\n \t\"goal\": 250,\n \t\"status\": \"active\",\n \t\"verificationCode\": \"LED1234\",\n \t\"createdAt\": \"2025-11-02T10:00:00Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "DELETE /admin/users/{user_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/admin/users/{{new_user_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "users",
+            "{{new_user_id}}"
+          ]
+        },
+        "description": "Delete Admin User Endpoint"
+      },
+      "response": [
+        {
+          "name": "Successful Admin User Deletion",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{user_id}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{user_id}"
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "POST /admin/users/{user_id}/resend-invite",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/admin/users/{{new_user_id}}/resend-invite",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "users",
+            "{{new_user_id}}",
+            "resend-invite"
+          ]
+        },
+        "description": "Resend Invite"
+      },
+      "response": [
+        {
+          "name": "Successful Invite Resend",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{user_id}/resend-invite",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{user_id}",
+                "resend-invite"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": \"usr-leader\",\n    \"temporaryPassword\": \"Tmp#2025\",\n    \"verificationCode\": \"NEWCODE\",\n    \"expiresAt\": \"2025-11-03T12:00:00Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET /admin/dashboard/summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/admin/dashboard/summary",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "dashboard",
+            "summary"
+          ]
+        },
+        "description": "Dashboard Summary"
+      },
+      "response": [
+        {
+          "name": "Successful Dashboard Summary",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/admin/dashboard/summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "summary"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"promoters\": {\n        \"active\": 1,\n        \"pending\": 0,\n        \"rejected\": 0\n    },\n    \"leaders\": {\n        \"active\": 1,\n        \"pending\": 0,\n        \"rejected\": 0\n    },\n    \"registrations\": {\n        \"today\": 1,\n        \"thisWeek\": 1,\n        \"thisMonth\": 1\n    },\n    \"apiVersion\": \"1.0.0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET /catalogs/locations",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/catalogs/locations",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "catalogs",
+            "locations"
+          ]
+        },
+        "description": "Catalog Locations"
+      },
+      "response": [
+        {
+          "name": "Successful Catalog Locations",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/catalogs/locations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "catalogs",
+                "locations"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"states\": [\n        \"Aguascalientes\",\n        \"Baja California\",\n        \"Ciudad de México\"\n    ],\n    \"municipalities\": [],\n    \"localities\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET /catalogs/roles",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/catalogs/roles",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "catalogs",
+            "roles"
+          ]
+        },
+        "description": "Catalog Roles"
+      },
+      "response": [
+        {
+          "name": "Successful Catalog Roles",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/catalogs/roles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "catalogs",
+                "roles"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"roles\": [\n        \"admin\",\n        \"leader\",\n        \"promoter\"\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET /health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Healthcheck"
+      },
+      "response": [
+        {
+          "name": "Successful Healthcheck",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"ok\",\n    \"timestamp\": \"2025-11-02T12:00:00Z\",\n    \"version\": \"1.0.0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Dipomex - Get Postal Code",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "APIKEY",
+            "value": "e92cc37cb439792a16c8205e91c1e23eeb5603f8"
+          }
+        ],
+        "url": {
+          "raw": "https://api.tau.com.mx/dipomex/v1/codigo_postal?cp=51867",
+          "protocol": "https",
+          "host": [
+            "api",
+            "tau",
+            "com",
+            "mx"
+          ],
+          "path": [
+            "dipomex",
+            "v1",
+            "codigo_postal"
+          ],
+          "query": [
+            {
+              "key": "cp",
+              "value": "51867"
+            }
+          ]
+        },
+        "description": "Get postal code information from Dipomex API."
+      },
+      "response": [
+        {
+          "name": "Successful Postal Code Retrieval",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "APIKEY",
+                "value": "e92cc37cb439792a16c8205e91c1e23eeb5603f8"
+              }
+            ],
+            "url": {
+              "raw": "https://api.tau.com.mx/dipomex/v1/codigo_postal?cp=51867",
+              "protocol": "https",
+              "host": [
+                "api",
+                "tau",
+                "com",
+                "mx"
+              ],
+              "path": [
+                "dipomex",
+                "v1",
+                "codigo_postal"
+              ],
+              "query": [
+                {
+                  "key": "cp",
+                  "value": "51867"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"error\": false,\n    \"message\": \"Procesamiento correcto.\",\n    \"codigo_postal\": {\n        \"estado\": \"MEXICO\",\n        \"estado_abreviatura\": \"MEX\",\n        \"municipio\": \"ALMOLOYA DE ALQUISIRAS\",\n        \"centro_reparto\": \"51801\",\n        \"codigo_postal\": \"51867\",\n        \"colonias\": [\n            \"Buenos Aires\",\n            \"Llano de las Casas\",\n            \"Progreso los Hernández (Colonia los Hernández)\",\n            \"San Antonio Pachuquilla\",\n            \"San José Tizates\",\n            \"Vista Hermosa\"\n        ]\n    }\n}"
+        }
+      ]
+    }
+  ]
+}
