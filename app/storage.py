@@ -188,6 +188,15 @@ class InMemoryDatabase:
             self._client_ids[client_request_id] = reg_id
         return RegistrationResponse(id=reg_id, status="pending_validation")
 
+    def _normalize_to_utc(self, value: Optional[datetime]) -> Optional[datetime]:
+        """Ensure incoming datetimes are comparable with stored UTC values."""
+
+        if value is None:
+            return None
+        if value.tzinfo is None:
+            return value.replace(tzinfo=timezone.utc)
+        return value.astimezone(timezone.utc)
+
     def list_registrations(
         self,
         page: int,
@@ -197,6 +206,9 @@ class InMemoryDatabase:
         from_date: Optional[datetime],
         to_date: Optional[datetime],
     ) -> RegistrationListResponse:
+        from_date = self._normalize_to_utc(from_date)
+        to_date = self._normalize_to_utc(to_date)
+
         items = list(self._registrations.values())
 
         def matches(item: RegistrationDetailResponse) -> bool:
