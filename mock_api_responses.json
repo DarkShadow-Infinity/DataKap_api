@@ -1,0 +1,221 @@
+{
+  "POST /auth/login": {
+    "token": "some-jwt-token",
+    "refreshToken": "some-refresh-token",
+    "expiresIn": 3600,
+    "user": {
+      "id": "usr-admin",
+      "email": "admin@datakap.mx",
+      "role": "admin",
+      "fullName": "Admin User",
+      "phone": "+52 55 0000 0000"
+    }
+  },
+  "POST /auth/complete-invite": {
+    "token": "some-jwt-token",
+    "refreshToken": "some-refresh-token",
+    "expiresIn": 3600,
+    "user": {
+      "id": "usr-example",
+      "email": "user@example.com",
+      "role": "promoter",
+      "fullName": "Example User",
+      "phone": "+52 55 1234 5678"
+    }
+  },
+  "POST /auth/refresh": {
+    "token": "a-new-jwt-token",
+    "expiresIn": 3600
+  },
+  "POST /auth/logout": null,
+  "GET /profile": {
+    "id": "usr-admin",
+    "email": "admin@datakap.mx",
+    "role": "admin",
+    "fullName": "Admin User",
+    "phone": "+52 55 0000 0000",
+    "apiVersion": "1.0.0"
+  },
+  "POST /registrations": {
+    "id": "srv-0002",
+    "status": "pending_validation"
+  },
+  "GET /registrations": {
+    "items": [
+      {
+        "id": "srv-0001",
+        "role": "promoter",
+        "requiresPhoto": true,
+        "fields": {
+          "nombre": "Juan",
+          "telefono": "5512345678"
+        },
+        "photoUrl": "https://cdn.datakap.mx/srv-0001.jpg",
+        "createdAt": "2025-11-01T12:00:00Z",
+        "syncedAt": "2025-11-01T12:05:00Z",
+        "syncStatus": "synced"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 1
+    }
+  },
+  "GET /registrations/{registration_id}": {
+    "id": "srv-0001",
+    "role": "promoter",
+    "requiresPhoto": true,
+    "fields": {
+      "nombre": "Juan",
+      "telefono": "5512345678"
+    },
+    "photoUrl": "https://cdn.datakap.mx/srv-0001.jpg",
+    "createdAt": "2025-11-01T12:00:00Z",
+    "syncedAt": "2025-11-01T12:05:00Z",
+    "syncStatus": "synced",
+    "clientRequestId": "seed-1"
+  },
+  "PATCH /registrations/{registration_id}": {
+    "id": "srv-0001",
+    "role": "promoter",
+    "requiresPhoto": true,
+    "fields": {
+      "nombre": "Juan",
+      "telefono": "5512345678",
+      "whatsapp": "5512345678"
+    },
+    "photoUrl": "https://cdn.datakap.mx/srv-0001.jpg",
+    "createdAt": "2025-11-01T12:00:00Z",
+    "syncedAt": "2025-11-02T14:30:00Z",
+    "syncStatus": "synced",
+    "clientRequestId": "seed-1"
+  },
+  "DELETE /registrations/{registration_id}": null,
+  "POST /registrations/sync": {
+    "results": [
+      {
+        "clientRequestId": "client-req-1",
+        "status": "synced",
+        "serverId": "srv-0003"
+      },
+      {
+        "clientRequestId": "client-req-2",
+        "status": "failed",
+        "serverId": null
+      }
+    ]
+  },
+  "GET /registrations/sync/summary": {
+    "pending": 10,
+    "syncedToday": 5,
+    "failed": 2
+  },
+  "GET /admin/users": {
+    "items": [
+      {
+        "id": "usr-admin",
+        "email": "admin@datakap.mx",
+        "fullName": "Admin User",
+        "phone": "+52 55 0000 0000",
+        "role": "admin",
+        "goal": 500,
+        "status": "active",
+        "verificationCode": "ADM1234",
+        "createdAt": "2025-11-02T10:00:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 1
+    }
+  },
+  "GET /admin/users/{user_id}": {
+    "id": "usr-leader",
+    "email": "leader@datakap.mx",
+    "fullName": "Leader User",
+    "phone": "+52 55 1111 1111",
+    "role": "leader",
+    "goal": 200,
+    "status": "active",
+    "verificationCode": "LED1234",
+    "createdAt": "2025-11-02T10:00:00Z"
+  },
+  "PATCH /admin/users/{user_id}": {
+    "id": "usr-leader",
+    "email": "leader@datakap.mx",
+    "fullName": "Leader User",
+    "phone": "+52 55 1111 1111",
+    "role": "leader",
+    "goal": 250,
+    "status": "active",
+    "verificationCode": "LED1234",
+    "createdAt": "2025-11-02T10:00:00Z"
+  },
+  "DELETE /admin/users/{user_id}": null,
+  "POST /admin/users/{user_id}/resend-invite": {
+    "id": "usr-leader",
+    "temporaryPassword": "Tmp#2025",
+    "verificationCode": "NEWCODE",
+    "expiresAt": "2025-11-03T12:00:00Z"
+  },
+  "GET /admin/dashboard/summary": {
+    "promoters": {
+      "active": 1,
+      "pending": 0,
+      "rejected": 0
+    },
+    "leaders": {
+      "active": 1,
+      "pending": 0,
+      "rejected": 0
+    },
+    "registrations": {
+      "today": 1,
+      "thisWeek": 1,
+      "thisMonth": 1
+    },
+    "apiVersion": "1.0.0"
+  },
+  "GET /catalogs/locations": {
+    "states": [
+      "Aguascalientes",
+      "Baja California",
+      "Ciudad de México"
+    ],
+    "municipalities": [],
+    "localities": []
+  },
+  "GET /catalogs/roles": {
+    "roles": [
+      "admin",
+      "leader",
+      "promoter"
+    ]
+  },
+  "GET /catalogs/postal-code/{postal_code}": {
+    "error": false,
+    "message": "Procesamiento correcto.",
+    "codigo_postal": {
+      "estado": "MEXICO",
+      "estado_abreviatura": "MEX",
+      "municipio": "ALMOLOYA DE ALQUISIRAS",
+      "centro_reparto": "51801",
+      "codigo_postal": "51867",
+      "colonias": [
+        "Buenos Aires",
+        "Llano de las Casas",
+        "Progreso los Hernández (Colonia los Hernández)",
+        "San Antonio Pachuquilla",
+        "San José Tizates",
+        "Vista Hermosa"
+      ]
+    }
+  },
+  "GET /health": {
+    "status": "ok",
+    "timestamp": "2025-11-02T12:00:00Z",
+    "version": "1.0.0"
+  }
+}

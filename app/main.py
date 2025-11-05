@@ -8,7 +8,10 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Query, Response, st
 
 from . import schemas
 from .auth import get_admin_user, get_current_user, get_token
+import httpx
+from .config import settings
 from .schemas import (
+    CodigoPostalResponse,
     AdminDashboardSummary,
     AdminUser,
     AdminUserCreateRequest,
@@ -313,6 +316,21 @@ def catalog_locations(
 @app.get("/catalogs/roles", response_model=CatalogRolesResponse)
 def catalog_roles(_: schemas.AuthenticatedUser = Depends(get_current_user)) -> CatalogRolesResponse:
     return CatalogRolesResponse(roles=[Role.ADMIN, Role.LEADER, Role.PROMOTER])
+
+@app.get("/catalogs/postal-code/{postal_code}", response_model=CodigoPostalResponse)
+async def get_postal_code(
+    postal_code: str,
+    _: schemas.AuthenticatedUser = Depends(get_current_user),
+) -> CodigoPostalResponse:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=settings.dipomex_api_url,
+            params={"cp": postal_code},
+            headers={"APIKEY": settings.dipomex_api_key},
+        )
+    if response.status_code != 200:
+        raise HTTPException(status_code=response.status_code, detail="Error fetching postal code")
+    return response.json()
 
 
 @app.get("/health", tags=["health"])

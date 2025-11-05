@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "DataKap API",
-    "_postman_id": "datakap-collection-1",
+    "_postman_id": "datakap-collection",
     "description": "Auto-generated simple Postman collection from OpenAPI: 1.0.0",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -17,6 +17,10 @@
     {
       "key": "clientRequestId",
       "value": "req-123"
+    },
+    {
+      "key": "postal_code",
+      "value": "51860"
     }
   ],
   "item": [
@@ -1360,6 +1364,62 @@
           ],
           "cookie": [],
           "body": "{\n    \"roles\": [\n        \"admin\",\n        \"leader\",\n        \"promoter\"\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET /catalogs/postal-code/{postal_code}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/catalogs/postal-code/{{postal_code}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "catalogs",
+            "postal-code",
+            "{{postal_code}}"
+          ]
+        },
+        "description": "Get Postal Code"
+      },
+      "response": [
+        {
+          "name": "Successful Postal Code Retrieval",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/catalogs/postal-code/{postal_code}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "catalogs",
+                "postal-code",
+                "51867"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"error\": false,\n    \"message\": \"Procesamiento correcto.\",\n    \"codigo_postal\": {\n        \"estado\": \"MEXICO\",\n        \"estado_abreviatura\": \"MEX\",\n        \"municipio\": \"ALMOLOYA DE ALQUISIRAS\",\n        \"centro_reparto\": \"51801\",\n        \"codigo_postal\": \"51867\",\n        \"colonias\": [\n            \"Buenos Aires\",\n            \"Llano de las Casas\",\n            \"Progreso los Hernández (Colonia los Hernández)\",\n            \"San Antonio Pachuquilla\",\n            \"San José Tizates\",\n            \"Vista Hermosa\"\n        ]\n    }\n}"
         }
       ]
     },

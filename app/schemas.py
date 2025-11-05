@@ -242,3 +242,16 @@ class CatalogRolesResponse(BaseModel):
 
 class LogoutResponse(BaseModel):
     message: str
+
+class CodigoPostal(BaseModel):
+    estado: str
+    estado_abreviatura: str
+    municipio: str
+    centro_reparto: str
+    codigo_postal: str
+    colonias: List[str]
+
+class CodigoPostalResponse(BaseModel):
+    error: bool
+    message: str
+    codigo_postal: CodigoPostal
